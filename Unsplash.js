@@ -1,4 +1,3 @@
-const $tool = new Tool();
 //let params = new URLSearchParams(args);
 const baseURL = "https://api.unsplash.com/photos/random";
 const args = $argument.split("&").reduce((acc, cur) => {
@@ -37,7 +36,7 @@ getYiYan().then(yiYan => {
                     "url": obj.links.html, //Linked webpage for the photo
                     "media-url": obj.urls.small //Photo image in low resolution (Caution: other resolutions may result in failure to display or less quality)
                 };
-                $notification.post(obj.user.name, yiYan, "", options);
+                $notification.post(`${args["ScriptName"]}`, obj.user.name, yiYan, options);
             } catch (parseError) {
                 $notification.post("Parse Error", "Failed to parse Unsplash data", "");
             }
@@ -50,15 +49,3 @@ getYiYan().then(yiYan => {
     $notification.post("Error", error.message, "");
     $done();
 });
-
-function Tool() {
-    this.notify = (author, yiYan, options) => {
-        $notification.post(`${args["ScriptName"]}`, author, yiYan, options);
-    };
-
-    this.get = (url, callback) => {
-        $httpClient.get(url, (error, response, data) => {
-            callback(error, response, data);
-        });
-    };
-}
