@@ -57,7 +57,7 @@ getYiYan().then(result => {
                     "media-url": obj.urls.small  // Photo image in low resolution
                 };
 
-                $notification.post(`${args["ScriptName"]}`, `${yiYan}`, `---- ${origin}`, options);
+                $notification.post(`${args["ScriptName"]}`, `${yiYan}`, `—— ${origin}`, options);
             } catch (parseError) {
                 $notification.post("Parse Error", "Failed to parse Unsplash data", "");
             }
