@@ -1,4 +1,5 @@
 //let params = new URLSearchParams(args);
+const dpr = window.devicePixelRatio;
 const baseURL = "https://api.unsplash.com/photos/random";
 const args = $argument.split("&").reduce((acc, cur) => {
     const [key, value] = cur.split("=");
@@ -54,7 +55,7 @@ getYiYan().then(result => {
                 let options = {
                     "action": "open-url",
                     "url": obj.links.html,  // Linked webpage to the photo
-                    "media-url": obj.urls.small  // Photo image in low resolution
+                    "media-url": obj.urls.full + `&w=1280&dpr=${dpr}`  // Photo image in low resolution
                 };
 
                 $notification.post(`${args["ScriptName"]}`, `${yiYan}`, `—— ${origin}`, options);
