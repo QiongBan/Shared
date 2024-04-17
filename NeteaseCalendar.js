@@ -5,7 +5,7 @@ $httpClient.get(fullURL, (error, response, data) => {
         try {
             let obj = JSON.parse(data);
             let title = "网易云音评";
-            let info = obj.data.songName + " - " + obj.data.singerName;
+            let info = obj.data.songName + " —— " + obj.data.singerName;
             let texts = obj.data.texts[0];
             let cover = obj.data.coverUrl;
             let options = {
