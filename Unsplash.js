@@ -6,9 +6,8 @@ const args = $argument.split("&").reduce((acc, cur) => {
     return acc;
 }, {});
 const fullURL = `${baseURL}?client_id=${args["client_id"]}&topics=${args["topics"]}&count=${args["count"]}`
-//let fullURL = ${baseURL}?${$argument};
+//const fullURL = `${baseURL}?${$argument}`;
 
-//`c` refers to the categories of YiYan, refer to https://developer.hitokoto.cn/sentence/ for more information
 function getYiYan() {
     return new Promise((resolve, reject) => {
         $httpClient.get("https://v1.hitokoto.cn?encode=json&c=d&c=e&c=i&c=j&c=k", (err, resp, data) => {
@@ -17,7 +16,11 @@ function getYiYan() {
             } else {
                 try {
                     let obj = JSON.parse(data);
-                    resolve(obj.hitokoto);
+                    resolve({
+                        yiYan: obj.hitokoto,
+                        from: obj.from,
+                        fromAuthor: obj.from_who
+                    });
                 } catch (parseError) {
                     reject(parseError);
                 }
@@ -26,17 +29,28 @@ function getYiYan() {
     });
 }
 
-getYiYan().then(yiYan => {
+getYiYan().then(result => {
+    const { yiYan, from, fromAuthor } = result;
     $httpClient.get(fullURL, (error, response, data) => {
         if (!error && response.status === 200) {
             try {
                 let obj = JSON.parse(data)[0];
+                //let author = obj.user.name;
+                let origin;
+                
+                if (!fromAuthor || from === fromAuthor) {
+                    origin = from;
+                } else {
+                    origin = `${from}--${fromAuthor}`;
+                }
+
                 let options = {
                     "action": "open-url",
-                    "url": obj.links.html, //Linked webpage for the photo
-                    "media-url": obj.urls.small //Photo image in low resolution (Caution: other resolutions may result in failure to display or less quality)
+                    "url": obj.links.html,  // Linked webpage to the photo
+                    "media-url": obj.urls.small  // Photo image in low resolution
                 };
-                $notification.post(`${args["ScriptName"]}`, obj.user.name, yiYan, options);
+
+                $notification.post(`${args["ScriptName"]}`, origin, yiYan, options);
             } catch (parseError) {
                 $notification.post("Parse Error", "Failed to parse Unsplash data", "");
             }
