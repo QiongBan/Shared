@@ -22,8 +22,7 @@ function getYiYan() {
                         yiYan: obj.hitokoto,
                         from: obj.from,
                         fromAuthor: obj.from_who,
-												creator: obj.creator
-                        
+			creator: obj.creator   
                     });
                 } catch (parseError) {
                     reject(parseError);
@@ -43,22 +42,21 @@ getYiYan().then(result => {
                 let origin;
                 
                 if (!fromAuthor || from === fromAuthor) {
-                    origin = from;
+                	origin = from;
                 } else if (!fromAuthor && !from || (fromAuthor === "原创" && from === "原创")) {
-									  origin = creator;
-								} else if (!from) {
-									  origin = fromAuthor;
-								} else {
+			origin = creator;
+		} else if (!from) {
+			origin = fromAuthor;
+		} else {
                     origin = `${fromAuthor} · ${from}`;
                 }
 
                 let options = {
                     "action": "open-url",
                     "url": obj.links.html,  // Linked webpage to the photo
-                    "media-url": obj.urls.full + `&w=1080&dpr=${dpr}`  // Photo image in low resolution
+                    "media-url": obj.urls.full + `&w=1000&dpr=${dpr}`  // Decrease the value of w if no image was posted
                 };
-
-                $notification.post(`${args["ScriptName"]}`, `${yiYan}`, `—— ${origin}`, options);
+		$notification.post(`${args["ScriptName"]}`, `${yiYan}`, `—— ${origin}`, options);
             } catch (parseError) {
                 $notification.post("Parse Error", "Failed to parse Unsplash data", "");
             }
