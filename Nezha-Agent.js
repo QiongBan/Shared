@@ -112,7 +112,7 @@ const ARCH = arg?.ARCH ?? ""
           Virtualization: '',
           BootTime: now,
           CountryCode: countryCode.toLowerCase(),
-          Version: 'VERSION',
+          Version: VERSION,
         },
         status: {
           CPU: 0,
